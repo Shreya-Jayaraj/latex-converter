@@ -163,7 +163,7 @@ function LatexToPDF() {
               src={preview}
               type="application/pdf"
               width="100%"
-              height="70vh"
+              height="100%"
             />
           ) : (
             <div className="w-full h-[70vh] flex items-center justify-center bg-gray-50 text-gray-500">
