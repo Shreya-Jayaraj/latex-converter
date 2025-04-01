@@ -8,7 +8,7 @@ exports.uploadImage = (req, res) => {
     if (req.file) {
       res.status(200).json({
         message: 'Image uploaded successfully!',
-        imagePath: `/images/${req.file.filename}`, 
+        imagePath: `images/${req.file.filename}`, 
       });
     } else {
       res.status(400).json({ error: 'No image uploaded' });
