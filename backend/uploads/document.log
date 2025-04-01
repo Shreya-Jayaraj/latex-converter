@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.4.1)  1 APR 2025 21:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.4.1)  1 APR 2025 23:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -256,41 +256,24 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 21.
 
 (F:\New folder (2)\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
+)
+! I can't write on file `document.pdf'.
+(Press Enter to retry, or Control-C to exit; default file extension is `.pdf')
+Please type another file name for output
+! Emergency stop.
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.66     \item A
+                 cylinder has a radius of 7 cm and a height of 14 cm. Calcul...
+*** (job aborted, file error in nonstop mode)
 
-{C:/Users/wwwdi/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[2] (E:\project\STC\latex-converter\backend\uploads\document.aux)
- ***********
-LaTeX2e <2023-11-01> patch level 1
-L3 programming layer <2024-01-04>
- ***********
- ) 
+ 
 Here is how much of TeX's memory you used:
- 3449 strings out of 474486
- 50950 string characters out of 5756385
+ 3426 strings out of 474486
+ 50231 string characters out of 5756385
  1932542 words of memory out of 5000000
- 25719 multiletter control sequences out of 15000+600000
+ 25700 multiletter control sequences out of 15000+600000
  566555 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,11n,65p,337b,285s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\wwwdi\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm
-1200.pk><F:/New folder (2)/fonts/type1/public/amsfonts/cm/cmbx12.pfb><F:/New fo
-lder (2)/fonts/type1/public/amsfonts/cm/cmmi12.pfb><F:/New folder (2)/fonts/typ
-e1/public/amsfonts/cm/cmmi8.pfb><F:/New folder (2)/fonts/type1/public/amsfonts/
-cm/cmr12.pfb><F:/New folder (2)/fonts/type1/public/amsfonts/cm/cmr17.pfb><F:/Ne
-w folder (2)/fonts/type1/public/amsfonts/cm/cmr8.pfb><F:/New folder (2)/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb>
-Output written on E:\project\STC\latex-converter\backend\uploads\document.pdf (
-2 pages, 88611 bytes).
-PDF statistics:
- 49 PDF objects out of 1000 (max. 8388607)
- 0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
-
+ 57i,5n,65p,271b,213s stack positions out of 10000i,1000n,20000p,200000b,200000s
+!  ==> Fatal error occurred, no output PDF file produced!

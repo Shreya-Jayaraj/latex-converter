@@ -23,7 +23,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+import Info from "./info";
+
 const Navbar = () => {
+  
   // State to manage the dropdown visibility
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -65,9 +68,12 @@ const Navbar = () => {
           )}
         </div>
         <div>
-          <Link to="/" className="px-4 py-2 hover:bg-green-600 rounded">
-            Another Page
-          </Link>
+        <button
+        onClick={() =>  window.open("/info","_blank","noopener,noreferrer")}
+        className="px-4 py-2 hover:bg-green-600 rounded"
+      >
+        Another Page
+      </button>
         </div>
       </div>
     </nav>
