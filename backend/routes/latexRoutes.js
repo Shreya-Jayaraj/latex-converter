@@ -1,11 +1,12 @@
 const express = require("express");
-const { getTemplates, saveTemplate, deleteTemplate, generatePDF } = require("../controllers/latexController");
-
+const { getTemplates, saveTemplate, deleteTemplate, generatePDF, uploadImage } = require("../controllers/latexController");
+const upload = require("../middleware/imageMiddleware");
 const router = express.Router();
 
-router.get("/templates", getTemplates);  // Get all templates
-router.post("/save-template", saveTemplate); // Save a new template
-router.delete("/templates/:id", deleteTemplate); // Delete a template
-router.post("/generate-pdf", generatePDF); // Generate PDF
+router.get("/templates", getTemplates);  
+router.post("/save-template", saveTemplate); 
+router.delete("/templates/:id", deleteTemplate); 
+router.post("/generate-pdf", generatePDF); 
+router.post("/image-upload",upload.single("image"),uploadImage);
 
 module.exports = router;

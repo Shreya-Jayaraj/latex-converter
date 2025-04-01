@@ -4,6 +4,17 @@ const Template = require("../models/template");
 const path = require("path");
 
 
+exports.uploadImage = (req, res) => {
+    if (req.file) {
+      res.status(200).json({
+        message: 'Image uploaded successfully!',
+        imagePath: `/uploads/images/${req.file.filename}`, 
+      });
+    } else {
+      res.status(400).json({ error: 'No image uploaded' });
+    }
+};
+
 exports.getTemplates = async (req, res) => {
   try {
     const templates = await Template.find();
@@ -47,27 +58,23 @@ exports.generatePDF = async (req, res) => {
       const latexFile = path.join(__dirname, "../uploads/document.tex");
       const pdfFile = path.join(__dirname, "../uploads/document.pdf");
   
-      // Write the LaTeX code to a temporary file
       fs.writeFileSync(latexFile, latexCode);
   
-      // Generate the PDF using pdflatex
       exec(`pdflatex -interaction=nonstopmode -output-directory=uploads ${latexFile}`, (error) => {
         if (error) {
           console.error("LaTeX Compilation Error:", error);
           return res.status(500).send("Error generating PDF");
         }
   
-        // Send the PDF as a binary stream
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Disposition", "inline; filename=document.pdf");
   
         const pdfStream = fs.createReadStream(pdfFile);
         pdfStream.pipe(res);
   
-        // Clean up the temporary files after sending the PDF
         pdfStream.on("end", () => {
-          fs.unlinkSync(latexFile);
-          fs.unlinkSync(pdfFile);
+          fs.promises.unlink(latexFile);
+          fs.promises.unlink(pdfFile);
         });
       });
   
