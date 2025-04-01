@@ -1,36 +1,23 @@
 const express = require("express");
-const fs = require("fs");
 const cors = require("cors");
-const { exec } = require("child_process");
+require("dotenv").config();
+const mongoose = require("mongoose");
+
+const routes = require("./routes/latexRoutes");
 
 const app = express();
-app.use(express.json());  // Parse JSON requests
-app.use(cors());  // Enable CORS for frontend requests
 
-// API to generate PDF from LaTeX
-app.post("/generate-pdf", (req, res) => {
-  const latexCode = req.body.latex;
-  const latexFile = "document.tex";
-  const pdfFile = "document.pdf";
+app.use(express.json());
+app.use(cors());
 
-  // Write LaTeX code to a file
-  fs.writeFileSync(latexFile, latexCode);
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-  // Run LaTeX compiler (pdflatex) to generate PDF
-  exec(`pdflatex -interaction=nonstopmode ${latexFile}`, (error) => {
-    if (error) {
-      console.error("LaTeX Compilation Error:", error);
-      return res.status(500).send("Error generating PDF");
-    }
+app.use("/", routes);
 
-    // Send the PDF file as a response
-    res.sendFile(`${__dirname}/${pdfFile}`, () => {
-      fs.unlinkSync(latexFile); // Cleanup
-      fs.unlinkSync(pdfFile);
-    });
-  });
-});
-
-// Start the server
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
