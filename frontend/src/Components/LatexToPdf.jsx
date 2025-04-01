@@ -44,17 +44,17 @@ function LatexToPDF() {
 
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('image', file);
 
       // Upload LaTeX file (optional implementation)
-      const response = await axios.post('http://localhost:3000/upload', formData, {
+      const response = await axios.post('http://localhost:3000/image-upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
 
-      if (response.data?.content) {
-        setCode(response.data.content);
+      if (response.data?.image) {
+        setCode(response.data.image);
       }
     } catch (err) {
       console.error('Upload error:', err);
