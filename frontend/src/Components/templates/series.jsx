@@ -13,9 +13,9 @@ function series() {
   useEffect(() => {
     const fetchLatexCode = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/templates"); // Adjust URL as needed
-        if (response.data.length > 0) {
-          setCode(response.data[0].latexCode);
+        const response = await axios.get("http://localhost:5000/templates/67ebaebe2bf66a1c9fde971d"); // Adjust URL as needed
+        if (response) {
+          setCode(response.data.latexCode);
         }
         console.log(response);
         console.log(response.data);

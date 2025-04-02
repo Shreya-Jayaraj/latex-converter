@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import MonacoEditor from '@monaco-editor/react';
-import { Download, Upload, RefreshCw } from 'lucide-react';
+import { Download, Upload, RefreshCw, Check, X } from 'lucide-react';
 import axios from 'axios';
 
 function LatexToPDF() {
@@ -8,6 +8,10 @@ function LatexToPDF() {
   const [preview, setPreview] = useState('');
   const [isCompiling, setIsCompiling] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
+  const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+  const [generatedLatex, setGeneratedLatex] = useState('');
 
   const handleCompile = useCallback(async () => {
     if (!code) {
@@ -19,10 +23,8 @@ function LatexToPDF() {
       setIsCompiling(true);
       setError(null);
 
-      // Send LaTeX code to backend to generate PDF
       const response = await axios.post('http://localhost:5000/generate-pdf', { latex: code }, { responseType: 'blob' });
 
-      // Check if the response is a valid PDF blob
       if (response.data && response.data instanceof Blob) {
         const url = window.URL.createObjectURL(response.data);
         setPreview(url);
@@ -30,7 +32,6 @@ function LatexToPDF() {
         setError('Failed to generate PDF. Please try again.');
       }
     } catch (err) {
-      // Check if the error is related to the server or network issues
       console.error('Compilation error:', err);
       setError(err.response?.data?.message || 'Server error occurred. Please try again later.');
     } finally {
@@ -38,27 +39,39 @@ function LatexToPDF() {
     }
   }, [code]);
 
-  const handleFileUpload = async (event) => {
+  const handleFileChange = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    setSelectedFile(file);
+    setImagePreview(URL.createObjectURL(file)); // Show image preview
+  };
+
+  const handleConfirmUpload = async () => {
+    if (!selectedFile) return;
+  
     try {
       const formData = new FormData();
-      formData.append('image', file);
-
-      // Upload LaTeX file (optional implementation)
-      const response = await axios.post('http://localhost:3000/image-upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      formData.append('image', selectedFile);
+  
+      const response = await axios.post('http://localhost:5000/image-upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-
-      if (response.data?.image) {
-        setCode(response.data.image);
+  
+      if (response.data?.imagePath) {
+        const imageUrl = response.data.imagePath;
+        setUploadedImageUrl(imageUrl);
+  
+        // Generate LaTeX code for inserting the image
+        const latexCode = `\\includegraphics[width=0.8\\textwidth]{${imageUrl}}`;
+        setGeneratedLatex(latexCode);
       }
     } catch (err) {
       console.error('Upload error:', err);
-      setError(err.response?.data?.message || 'Failed to upload file');
+      setError(err.response?.data?.message || 'Failed to upload image');
+    } finally {
+      setSelectedFile(null);
+      setImagePreview('');
     }
   };
 
@@ -89,23 +102,24 @@ function LatexToPDF() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-6 h-auto">
         {/* Left Panel: LaTeX Editor */}
-        <div className="bg-white rounded-lg shadow-lg p-4">
+        <div className="bg-white min-h-[150vh] rounded-lg shadow-lg p-4">
           <div className="flex justify-end space-x-2 mb-4">
             <label className="cursor-pointer">
               <input
                 type="file"
                 className="hidden"
-                accept=".tex,.txt"
-                onChange={handleFileUpload}
+                accept="image/png, image/jpeg, image/jpg"
+                onChange={handleFileChange}
               />
               <div className="flex items-center space-x-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-md hover:bg-purple-200">
                 <Upload className="w-4 h-4" />
-                <span>Upload</span>
+                <span>Upload Image</span>
               </div>
             </label>
           </div>
+
           <MonacoEditor
             height="70vh"
             language="latex"
@@ -158,15 +172,57 @@ function LatexToPDF() {
               </button>
             </div>
           </div>
+
+          {imagePreview && (
+            <div className="mb-4 flex flex-col items-center">
+              <p className="text-sm mb-2">Image Preview:</p>
+              <img src={imagePreview} alt="Preview" className="w-60 h-auto rounded-lg shadow-md" />
+              <div className="flex space-x-2 mt-2">
+                <button
+                  onClick={handleConfirmUpload}
+                  className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 flex items-center space-x-1"
+                >
+                  <Check className="w-4 h-4" />
+                  <span>OK</span>
+                </button>
+                <button
+                  onClick={() => { setSelectedFile(null); setImagePreview(''); }}
+                  className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 flex items-center space-x-1"
+                >
+                  <X className="w-4 h-4" />
+                  <span>Cancel</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* {uploadedImageUrl && (
+            <div className="mt-4 p-2 bg-gray-100 rounded-md text-center">
+              <p className="text-sm">Image Path:</p>
+              <code className="text-blue-600 break-all">{uploadedImageUrl}</code>
+            </div>
+          )} */}
+          {generatedLatex && (
+            <div className="mt-4 p-2 bg-gray-100 rounded-md">
+              <p className="text-sm font-semibold text-black">LaTeX Code for Image: paste this line of code where you want to insert the image</p>
+              <div className="flex items-center">
+                <code className="text-blue-600 bg-white px-2 py-1 rounded-md border border-gray-300 flex-1">
+                  {generatedLatex}
+                </code>
+                <button
+                  onClick={() => navigator.clipboard.writeText(generatedLatex)}
+                  className="ml-2 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600"
+                >
+                  Copy
+                </button>
+              </div>
+            </div>
+          )}
+
           {preview ? (
-            <embed
-              src={preview}
-              type="application/pdf"
-              width="100%"
-              height="100%"
-            />
+            <embed src={preview} type="application/pdf" width="100%" height="60%" />
           ) : (
-            <div className="w-full h-[70vh] flex items-center justify-center bg-gray-50 text-gray-500">
+            <div className="w-full h-full flex items-center justify-center bg-gray-50 text-gray-500">
               {isCompiling ? (
                 <div className="flex flex-col items-center">
                   <RefreshCw className="w-8 h-8 animate-spin mb-2" />

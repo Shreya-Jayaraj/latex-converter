@@ -13,9 +13,9 @@ function Semester() {
   useEffect(() => {
     const fetchLatexCode = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/templates"); // Adjust URL as needed
-        if (response.data.length > 0) {
-          setCode(response.data[0].latexCode);
+        const response = await axios.get("http://localhost:5000/templates/67ec412eb322562998a9ea6f"); // Adjust URL as needed
+        if (response) {
+          setCode(response.data.latexCode);
         }
         console.log(response);
         console.log(response.data);
@@ -137,9 +137,9 @@ function Semester() {
             </div>
           </div>
           {preview ? (
-            <embed src={preview} type="application/pdf" width="100%" height="100vh" />
+            <embed src={preview} type="application/pdf" width="100%" height="100%" />
           ) : (
-            <div className="w-full h-[100vh] flex items-center justify-center bg-gray-50 text-gray-500">
+            <div className="w-full h-[70vh] flex items-center justify-center bg-gray-50 text-gray-500">
               {isCompiling ? (
                 <div className="flex flex-col items-center">
                   <RefreshCw className="w-8 h-8 animate-spin mb-2" />

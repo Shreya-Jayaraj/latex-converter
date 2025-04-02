@@ -18,7 +18,7 @@ const AppContent = () => {
 
   return (
     <div
-      className={`bg-gray-900 text-white transition-all duration-1200 ease-out transform ${
+      className={`bg-gray-900 h-[250vh] text-white transition-all duration-1200 ease-out transform ${
         fadeIn ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
       }`}
     >
