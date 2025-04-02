@@ -15,6 +15,7 @@ function series() {
 
   // Fetch LaTeX code from MongoDB
   useEffect(() => {
+    document.title = "Series Template Page";
     const fetchLatexCode = async () => {
       try {
         const response = await axios.get("http://localhost:5000/templates/67ebaebe2bf66a1c9fde971d"); // Adjust URL as needed

@@ -16,6 +16,7 @@ function Semester() {
 
   // Fetch LaTeX code from MongoDB
   useEffect(() => {
+    document.title = "Semester Template Page";
     const fetchLatexCode = async () => {
       try {
         const response = await axios.get("http://localhost:5000/templates/67ec412eb322562998a9ea6f"); // Adjust URL as needed

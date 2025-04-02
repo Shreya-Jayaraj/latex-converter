@@ -12,6 +12,7 @@ const AppContent = () => {
   const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
+    document.title = "Descriptive Question Paper";
     setFadeIn(false); // Reset animation
     setTimeout(() => setFadeIn(true), 300); // Delay to trigger animation
   }, [location.pathname]); // Run on route change
