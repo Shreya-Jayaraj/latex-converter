@@ -1,12 +1,7 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import Info from "./info";
-
-
 const Navbar = () => {
-  
   // State to manage the dropdown visibility
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -14,43 +9,56 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
   return (
-    <nav className="bg-gray-200 text-black py-4 h-[10vh]">
-      <div className="container mx-auto flex justify-between">
-        <Link to="/" className="text-lg font-semibold hover:text-[#1e4b9c]">
+    <nav className="bg-[#F8F9FB] text-black py-4 h-[10vh] relative"> 
+      <div className="container mx-auto px-6 flex justify-between items-center">          
+        <Link to="/" className="text-2xl font-bold gradient-text hover:text-blue-700">
           LaTeX Converter
         </Link>
-        <div >
-          {/* Question Paper button that toggles the dropdown */}
-          <button
-            onClick={toggleDropdown}
-            className="px-4 py-2 hover:bg-[#1e4b9c] hover:text-white rounded"
+        
+        {/* Dropdown Container */}
+        <div className="relative">
+        <button
+        onClick={toggleDropdown}
+        className="text-lg font-semibold px-4 py-2 relative cursor-pointer z-10
+          after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px]
+          after:bg-[#1e4b9c] after:transition-all after:duration-300
+          hover:after:w-full"
+        >
+        Question Paper
+        </button>
+
+
+          {/* Dropdown menu with smooth transition */}
+          <div
+            className={`absolute left-0 bg-gray-700 text-white mt-2 rounded shadow-lg transition-all duration-300 ease-in-out transform z-10 ${
+              isDropdownOpen ? "opacity-100 translate-y-2 scale-100" : "opacity-0 translate-y-[-10px] scale-95 pointer-events-none"
+            }`}
           >
-            Question Paper
-          </button>
-          {/* Dropdown menu */}
-          {isDropdownOpen && (
-            <div className="absolute bg-gray-700 text-white mt-2 rounded shadow-lg">
-              <Link
-                to="/series"
-                className="block px-4 py-2 hover:bg-[#1e4b9c]"
-                onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
-              >
-                series exam template
-              </Link>
-              <Link
-                to="/semester"
-                className="block px-4 py-2 hover:bg-[#1e4b9c]"
-                onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
-              >
-                Semester exam template
-              </Link>
-            </div>
-          )}
+            <Link
+              to="/series"
+              className="block px-4 py-2 hover:bg-blue-500"
+              onClick={() => setIsDropdownOpen(false)} 
+            >
+              Series Exam Template
+            </Link>
+            <Link
+              to="/semester"
+              className="block px-4 py-2 hover:bg-blue-500"
+              onClick={() => setIsDropdownOpen(false)} 
+            >
+              Semester Exam Template
+            </Link>
+          </div>
         </div>
+
+        {/* Instructions Button - Opens in New Tab */}
         <div>
-            <button
-            onClick={() =>  window.open("/info","_blank","noopener,noreferrer")}
-            className="px-4 py-2 hover:bg-[#1e4b9c] hover:text-white rounded"
+          <button
+            onClick={() => window.open("/info", "_blank", "noopener,noreferrer")}
+            className="text-lg font-semibold px-4 py-2 relative cursor-pointer z-10
+          after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px]
+          after:bg-[#1e4b9c] after:transition-all after:duration-300
+          hover:after:w-full"
           >
             Instructions
           </button>

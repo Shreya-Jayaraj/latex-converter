@@ -127,9 +127,9 @@ function Semester() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="grid grid-cols-2 gap-6 h-auto rounded-lg shadow-lg p-4 border-1 border-[#1e4b9c]">
+      <div className="grid grid-cols-2 gap-6 h-[130vh] rounded-lg shadow-lg p-4 border-1 border-blue-500">
         {/* Left Panel: LaTeX Editor */}
-        <div className="bg-white min-h-[150vh] rounded-lg shadow-lg  border-1 border-[#1e4b9c] p-4">
+        <div className="bg-white min-h-[120vh] rounded-lg shadow-lg  border-1 border-blue-500 p-4">
           <div className="flex justify-end space-x-2 mb-4">
             <label className="cursor-pointer">
               <input
@@ -138,7 +138,7 @@ function Semester() {
                 accept="image/png, image/jpeg, image/jpg"
                 onChange={handleFileChange}
               />
-              <div className="flex items-center space-x-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-md hover:bg-purple-200">
+              <div className="flex items-center space-x-1 bg-[#1e4b9c] text-white px-3 py-1 text-sm font-medium  rounded-md cursor-pointer hover:bg-blue-700">
                 <Upload className="w-4 h-4" />
                 <span>Upload Image</span>
               </div>
@@ -146,7 +146,7 @@ function Semester() {
           </div>
 
           <MonacoEditor
-            height="70vh"
+            height="110vh"
             language="latex"
             value={code}
             onChange={(value) => setCode(value || '')}
@@ -186,11 +186,11 @@ function Semester() {
               <button
                 onClick={handleDownload}
                 disabled={isCompiling || !preview}
-                className={`flex items-center space-x-1 ${
+                className={`flex items-center space-x-1 px-3 py-1 text-sm font-semibold rounded-md transition-colors ${
                   isCompiling || !preview
-                    ? 'bg-gray-100 text-gray-500'
-                    : 'bg-green-100 text-green-700 hover:bg-green-200'
-                } px-3 py-1 rounded-md transition-colors`}
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-green-600 text-white hover:bg-green-700"
+                }`}
               >
                 <Download className="w-4 h-4" />
                 <span>Download PDF</span>
@@ -246,9 +246,9 @@ function Semester() {
           )}
 
           {preview ? (
-            <embed src={preview} type="application/pdf" width="100%" height="60%" />
+            <embed src={preview} type="application/pdf" width="100%" height="90%" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-50 text-gray-500">
+            <div className="w-full h-[90%] flex items-center justify-center bg-gray-50 text-gray-500">
               {isCompiling ? (
                 <div className="flex flex-col items-center">
                   <RefreshCw className="w-8 h-8 animate-spin mb-2" />
