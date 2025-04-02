@@ -10,6 +10,6 @@ router.post("/save-template", saveTemplate);
 router.delete("/templates/:id", deleteTemplate); 
 router.post("/generate-pdf", generatePDF); 
 router.post("/image-upload",upload.single("image"),uploadImage);
-router.post("/extract-latex",pdfupload.single("pdf"),extractLatex);
+router.post("/extract-latex",pdfupload.single("latexFile"),extractLatex);
 
 module.exports = router;

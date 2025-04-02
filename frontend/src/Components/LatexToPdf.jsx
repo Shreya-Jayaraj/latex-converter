@@ -12,38 +12,49 @@ function LatexToPDF() {
   const [imagePreview, setImagePreview] = useState('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const [generatedLatex, setGeneratedLatex] = useState('');
-  const [selectedLatexFile, setSelectedLatexFile] = useState(null);
-
-
   // Handle LaTeX File Selection
   const handleLatexFileChange = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    setSelectedLatexFile(file);
-    handleLatexUpload(); 
-  }
-  };
-  // Upload LaTeX File and Fetch LaTeX Code
-const handleLatexUpload = async () => {
-  if (!selectedLatexFile) return;
-
-  try {
-    const formData = new FormData();
-    formData.append("latexFile", selectedLatexFile);
-
-    const response = await axios.post("http://localhost:5000/extract-latex", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    if (response.data?.latexCode) {
-      setCode(response.data.latexCode); // Store LaTeX code for Monaco Editor
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    console.log("Selected file:", file.name);
+    if (!file.name.endsWith(".tex")) {
+      alert("Please upload a valid LaTeX (.tex) file.");
+      return;
     }
-  } catch (err) {
-    console.error("Upload error:", err);
-  } finally {
-    setSelectedLatexFile(null);
-  }
-};
+  
+    handleLatexUpload(file); // Pass file directly
+  };
+  
+  // Upload LaTeX File and Fetch LaTeX Code
+  const handleLatexUpload = async (file) => {
+    if (!file) return;
+  
+    try {
+      const formData = new FormData();
+      formData.append("latexFile", file);
+  
+      const response = await axios.post("http://localhost:5000/extract-latex", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+  
+      console.log(response.data);
+      if (response.data?.latexCode) {
+        console.log("LaTeX Code received:", response.data.latexCode);
+        setCode(response.data.latexCode); // Store LaTeX code for Monaco Editor
+      }
+      else {
+        console.error("Invalid response from server:", response.data);
+        alert("Failed to extract LaTeX code. Please try again.");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      if (err.response) {
+        console.error("Backend Error:", err.response.data); // Show backend error message
+      }
+    }
+  };
+  
   const handleCompile = useCallback(async () => {
     if (!code) {
       setError('Please enter LaTeX code.');
@@ -153,7 +164,23 @@ const handleLatexUpload = async () => {
               </div>
 
             </label>
+            <label className="cursor-pointer">
+            <input
+              type="file"
+              className="hidden"
+              accept=".tex"
+              onChange={handleLatexFileChange} // Auto-upload when file is selected
+            />
+            <div className="flex items-center space-x-1 bg-[#1e4b9c] text-white px-3 py-1 text-sm font-medium rounded-md cursor-pointer hover:bg-blue-700">
+              <Upload className="w-4 h-4" />
+              <span>Upload LaTeX</span>
+            </div>
+          </label>
           </div>
+          
+          
+        
+
 
           {imagePreview && (
                       <div className="fixed inset-0 flex items-start justify-center backdrop-blur-sm z-50"
