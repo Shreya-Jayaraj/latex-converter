@@ -127,9 +127,9 @@ function Semester() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="grid grid-cols-2 gap-6 h-auto rounded-lg shadow-lg p-4 border-1 border-blue-500">
+      <div className="grid grid-cols-2 gap-6 h-auto rounded-lg shadow-lg p-4 border-1 border-[#1e4b9c]">
         {/* Left Panel: LaTeX Editor */}
-        <div className="bg-white min-h-[150vh] rounded-lg shadow-lg  border-1 border-blue-500 p-4">
+        <div className="bg-white min-h-[150vh] rounded-lg shadow-lg  border-1 border-[#1e4b9c] p-4">
           <div className="flex justify-end space-x-2 mb-4">
             <label className="cursor-pointer">
               <input
@@ -161,7 +161,7 @@ function Semester() {
         </div>
 
         {/* Right Panel: PDF Preview */}
-        <div className="bg-white rounded-lg shadow-lg p-4">
+        <div className="bg-white rounded-lg shadow-lg p-4 border-1 border-[#1e4b9c]">
           <div className="flex justify-between items-center mb-4">
             <div className="flex-1">
               {error && (

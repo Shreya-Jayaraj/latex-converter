@@ -28,8 +28,8 @@ const AppContent = () => {
       {location.pathname !== "/info" && (
         <>
           <div className="container mx-auto px-4 py-3">
-            <h1 className="text-3xl font-bold text-center mb-6 text-blue-800">LaTeX Converter</h1>
-            <p className="text-center text-blue-700 mb-4">
+            <h1 className="text-3xl font-bold text-center mb-6 text-[#1e4b9c]">LaTeX Converter</h1>
+            <p className="text-center text-[#1e4b9c] mb-4">
               Convert your LaTeX documents to PDF easily.
             </p>
           </div>

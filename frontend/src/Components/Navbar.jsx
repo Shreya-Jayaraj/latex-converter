@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import Info from "./info";
 
+
 const Navbar = () => {
   
   // State to manage the dropdown visibility
@@ -13,16 +14,16 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
   return (
-    <nav className="bg-[#F8F9FB] text-black py-4 h-[10vh]">
+    <nav className="bg-gray-200 text-black py-4 h-[10vh]">
       <div className="container mx-auto flex justify-between">
-        <Link to="/" className="text-lg font-semibold hover:text-blue-700">
+        <Link to="/" className="text-lg font-semibold hover:text-[#1e4b9c]">
           LaTeX Converter
         </Link>
         <div >
           {/* Question Paper button that toggles the dropdown */}
           <button
             onClick={toggleDropdown}
-            className="px-4 py-2 hover:bg-blue-500 rounded"
+            className="px-4 py-2 hover:bg-[#1e4b9c] hover:text-white rounded"
           >
             Question Paper
           </button>
@@ -31,14 +32,14 @@ const Navbar = () => {
             <div className="absolute bg-gray-700 text-white mt-2 rounded shadow-lg">
               <Link
                 to="/series"
-                className="block px-4 py-2 hover:bg-blue-500"
+                className="block px-4 py-2 hover:bg-[#1e4b9c]"
                 onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
               >
                 series exam template
               </Link>
               <Link
                 to="/semester"
-                className="block px-4 py-2 hover:bg-blue-500"
+                className="block px-4 py-2 hover:bg-[#1e4b9c]"
                 onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
               >
                 Semester exam template
@@ -49,7 +50,7 @@ const Navbar = () => {
         <div>
             <button
             onClick={() =>  window.open("/info","_blank","noopener,noreferrer")}
-            className="px-4 py-2 hover:bg-blue-500 rounded"
+            className="px-4 py-2 hover:bg-[#1e4b9c] hover:text-white rounded"
           >
             Instructions
           </button>
