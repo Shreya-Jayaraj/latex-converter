@@ -102,9 +102,9 @@ function LatexToPDF() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="grid grid-cols-2 gap-6 h-auto">
+      <div className="grid grid-cols-2 gap-6 h-auto rounded-lg shadow-sm  border-1 border-blue-500 p-4">
         {/* Left Panel: LaTeX Editor */}
-        <div className="bg-white min-h-[150vh] rounded-lg shadow-lg p-4">
+        <div className="bg-white min-h-[150vh] rounded-lg border-1 border-blue-500 shadow-lg p-4">
           <div className="flex justify-end space-x-2 mb-4">
             <label className="cursor-pointer">
               <input
@@ -121,7 +121,7 @@ function LatexToPDF() {
           </div>
 
           <MonacoEditor
-            height="70vh"
+            height="100vh"
             language="latex"
             value={code}
             onChange={(value) => setCode(value || '')}
@@ -136,7 +136,7 @@ function LatexToPDF() {
         </div>
 
         {/* Right Panel: PDF Preview */}
-        <div className="bg-white rounded-lg shadow-lg p-4">
+        <div className="bg-white rounded-lg shadow-lg p-4 border-1 border-blue-500">
           <div className="flex justify-between items-center mb-4">
             <div className="flex-1">
               {error && (
@@ -210,7 +210,9 @@ function LatexToPDF() {
                   {generatedLatex}
                 </code>
                 <button
-                  onClick={() => navigator.clipboard.writeText(generatedLatex)}
+                  onClick={() => {
+                    navigator.clipboard.writeText(generatedLatex);
+                    setGeneratedLatex('');}}
                   className="ml-2 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600"
                 >
                   Copy
@@ -222,7 +224,7 @@ function LatexToPDF() {
           {preview ? (
             <embed src={preview} type="application/pdf" width="100%" height="60%" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-50 text-gray-500">
+            <div className="w-full h-auto flex items-center justify-center bg-gray-50 text-gray-500">
               {isCompiling ? (
                 <div className="flex flex-col items-center">
                   <RefreshCw className="w-8 h-8 animate-spin mb-2" />
