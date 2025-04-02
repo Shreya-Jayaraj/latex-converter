@@ -9,7 +9,8 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
   return (
-    <nav className="bg-[#F8F9FB] text-black py-4 h-[10vh] relative"> 
+    <nav className="bg-[#F8F9FB] text-black relative py-4 h-[12vh] shadow-[0_10px_15px_-3px_rgba(0,0,0,0.2)]">
+ 
       <div className="container mx-auto px-6 flex justify-between items-center">          
         <Link to="/" className="text-2xl font-bold gradient-text hover:text-blue-700">
           LaTeX Converter

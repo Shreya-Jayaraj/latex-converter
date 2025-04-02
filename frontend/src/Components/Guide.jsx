@@ -3,7 +3,7 @@ import { BookOpen } from 'lucide-react';
 
 function Guide() {
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-4 mt-6">
       <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-6 border  border-[#1e4b9c]">
         <div className="flex items-center space-x-2 mb-4">
           <BookOpen className="w-6 h-6 text-[#1e4b9c]" />
