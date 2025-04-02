@@ -24,21 +24,21 @@ const Info = () => {
 
   return (
    
-    <div className={`min-h-screen bg-white text-gray-900 p-6 transition-opacity duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
-      <h1 className="text-2xl font-bold mb-4 text-center">Instructions</h1>
+    <div className={`min-h-screen bg-white  p-6 transition-opacity duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+      <h1 className="text-2xl font-bold mb-4 text-center text-[#1e4b9c]">Instructions</h1>
 
       <div className="max-w-3xl mx-auto space-y-4">
         {sections.map((section, index) => (
           <div
             key={index}
-            className={`border border-blue-500 shadow-lg rounded-lg overflow-hidden transition-all duration-1000 transform ${
+            className={`border border-[#1e4b9c] shadow-lg rounded-lg overflow-hidden transition-all duration-1000 transform ${
               isLoaded ? `opacity-100 translate-y-0 delay-[${index * 200}ms]` : "opacity-0 translate-y-[-30%]"
             }`}
           >
            
             <button
               onClick={() => toggleCollapse(index)}
-              className="w-full flex justify-between items-center text-lg font-semibold bg-gray-100 px-4 py-3 rounded-md"
+              className="w-full flex justify-between items-center text-lg text-[#1e4b9c] font-semibold bg-gray-100 px-4 py-3 rounded-md"
             >
               <span>{section.title}</span>
               {openIndex === index ? <ChevronDown /> : <ChevronRight />}

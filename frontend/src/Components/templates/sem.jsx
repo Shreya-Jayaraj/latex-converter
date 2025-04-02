@@ -12,6 +12,7 @@ function Semester() {
   const [imagePreview, setImagePreview] = useState('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const [generatedLatex, setGeneratedLatex] = useState('');
+  const [showImageModal, setShowImageModal] = useState(false);
 
   // Fetch LaTeX code from MongoDB
   useEffect(() => {
@@ -66,20 +67,21 @@ function Semester() {
   const handleFileChange = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
+  
     setSelectedFile(file);
     setImagePreview(URL.createObjectURL(file)); // Show image preview
+    setShowImageModal(true); // Show modal on image selection
   };
-
+  
   const handleConfirmUpload = async () => {
     if (!selectedFile) return;
   
     try {
       const formData = new FormData();
-      formData.append('image', selectedFile);
+      formData.append("image", selectedFile);
   
-      const response = await axios.post('http://localhost:5000/image-upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const response = await axios.post("http://localhost:5000/image-upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
   
       if (response.data?.imagePath) {
@@ -91,14 +93,16 @@ function Semester() {
         setGeneratedLatex(latexCode);
       }
     } catch (err) {
-      console.error('Upload error:', err);
-      setError(err.response?.data?.message || 'Failed to upload image');
+      console.error("Upload error:", err);
+      setError(err.response?.data?.message || "Failed to upload image");
     } finally {
+      setShowImageModal(false);
       setSelectedFile(null);
-      setImagePreview('');
+      setImagePreview("");
     }
   };
-
+  
+  
   const handleDownload = async () => {
     try {
       if (!preview) return;
@@ -130,20 +134,75 @@ function Semester() {
       <div className="grid grid-cols-2 gap-6 h-[130vh] rounded-lg shadow-lg p-4 border-1 border-blue-500">
         {/* Left Panel: LaTeX Editor */}
         <div className="bg-white min-h-[120vh] rounded-lg shadow-lg  border-1 border-blue-500 p-4">
-          <div className="flex justify-end space-x-2 mb-4">
-            <label className="cursor-pointer">
-              <input
-                type="file"
-                className="hidden"
-                accept="image/png, image/jpeg, image/jpg"
-                onChange={handleFileChange}
-              />
-              <div className="flex items-center space-x-1 bg-[#1e4b9c] text-white px-3 py-1 text-sm font-medium  rounded-md cursor-pointer hover:bg-blue-700">
-                <Upload className="w-4 h-4" />
-                <span>Upload Image</span>
-              </div>
-            </label>
+        <div className="flex justify-end space-x-2 mb-4">
+          <label className="cursor-pointer">
+            <input
+              type="file"
+              className="hidden"
+              accept="image/png, image/jpeg, image/jpg"
+              onChange={handleFileChange}
+            />
+            <div className="flex items-center space-x-1 bg-[#1e4b9c] text-white px-3 py-1 text-sm font-medium rounded-md cursor-pointer hover:bg-blue-700">
+                            <Upload className="w-4 h-4" />
+                            <span>Upload Image</span>
+                          </div>
+          </label>
           </div>
+
+          
+          {/* Image Preview Modal */}
+          {imagePreview && (
+            <div className="fixed inset-0 flex items-start justify-center backdrop-blur-sm z-50"
+              onClick={() => setImagePreview("")} // Click outside to close
+            >
+              <div className=" p-4 rounded-lg  w-[70vh] h-[60vh] flex flex-col items-center relative"
+                onClick={(e) => e.stopPropagation()} // Stops click from closing when interacting inside pop-up
+              >
+                <p className="text-sm font-semibold mb-2">Image Preview</p>
+                
+                <img src={imagePreview} alt="Preview" className="w-[180px] h-auto rounded-md shadow-sm" />
+                
+                <div className="flex space-x-2 mt-3">
+                  <button
+                    onClick={handleConfirmUpload}
+                    className="bg-green-500 text-white px-2 py-1 text-xs rounded-md hover:bg-green-600 flex items-center"
+                  >
+                    <Check className="w-3 h-3 mr-1" />
+                    OK
+                  </button>
+                  <button
+                    onClick={() => setImagePreview("")}
+                    className="bg-red-500 text-white px-2 py-1 text-xs rounded-md hover:bg-red-600 flex items-center"
+                  >
+                    <X className="w-3 h-3 mr-1" />
+                    Cancel
+                  </button>
+                </div>
+
+                {/* Display LaTeX Code Only After Clicking OK */}
+                {generatedLatex && (
+                  <div className="mt-4 p-2 bg-gray-100 rounded-md w-full">
+                    <p className="text-sm font-semibold text-black text-center">
+                      LaTeX Code for Image (Copy & Paste)
+                    </p>
+                    <div className="flex items-center justify-between p-2 bg-white border border-gray-300 rounded-md">
+                      <code className="text-blue-600 flex-1 break-all">{generatedLatex}</code>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(generatedLatex);
+                          setGeneratedLatex('');
+                        }}
+                        className="ml-2 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
 
           <MonacoEditor
             height="110vh"
@@ -161,7 +220,7 @@ function Semester() {
         </div>
 
         {/* Right Panel: PDF Preview */}
-        <div className="bg-white rounded-lg shadow-lg p-4">
+        <div className="bg-white rounded-lg shadow-lg p-4 border-1 border-[#1e4b9c]">
           <div className="flex justify-between items-center mb-4">
             <div className="flex-1">
               {error && (
@@ -198,7 +257,7 @@ function Semester() {
             </div>
           </div>
 
-          {imagePreview && (
+          {/* {imagePreview && (
             <div className="mb-4 flex flex-col items-center">
               <p className="text-sm mb-2">Image Preview:</p>
               <img src={imagePreview} alt="Preview" className="w-60 h-auto rounded-lg shadow-md" />
@@ -219,7 +278,7 @@ function Semester() {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* {uploadedImageUrl && (
             <div className="mt-4 p-2 bg-gray-100 rounded-md text-center">
@@ -227,7 +286,7 @@ function Semester() {
               <code className="text-blue-600 break-all">{uploadedImageUrl}</code>
             </div>
           )} */}
-          {generatedLatex && (
+          {/* {generatedLatex && (
             <div className="mt-4 p-2 bg-gray-100 rounded-md">
               <p className="text-sm font-semibold text-black">LaTeX Code for Image: paste this line of code where you want to insert the image</p>
               <div className="flex items-center">
@@ -243,7 +302,7 @@ function Semester() {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
 
           {preview ? (
             <embed src={preview} type="application/pdf" width="100%" height="90%" />
