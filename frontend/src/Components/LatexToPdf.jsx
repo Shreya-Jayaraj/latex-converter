@@ -113,10 +113,11 @@ function LatexToPDF() {
                 accept="image/png, image/jpeg, image/jpg"
                 onChange={handleFileChange}
               />
-              <div className="flex items-center space-x-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-md hover:bg-purple-200">
+              <div className="flex items-center space-x-1 bg-[#1e4b9c] text-white px-3 py-1 text-sm font-medium rounded-md cursor-pointer hover:bg-blue-700">
                 <Upload className="w-4 h-4" />
                 <span>Upload Image</span>
               </div>
+
             </label>
           </div>
 
@@ -161,15 +162,16 @@ function LatexToPDF() {
               <button
                 onClick={handleDownload}
                 disabled={isCompiling || !preview}
-                className={`flex items-center space-x-1 ${
+                className={`flex items-center space-x-1 px-3 py-1 text-sm font-semibold rounded-md transition-colors ${
                   isCompiling || !preview
-                    ? 'bg-gray-100 text-gray-500'
-                    : 'bg-green-100 text-green-700 hover:bg-green-200'
-                } px-3 py-1 rounded-md transition-colors`}
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-green-600 text-white hover:bg-green-700"
+                }`}
               >
                 <Download className="w-4 h-4" />
                 <span>Download PDF</span>
               </button>
+
             </div>
           </div>
 
