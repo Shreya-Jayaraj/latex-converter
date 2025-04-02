@@ -12,7 +12,38 @@ function LatexToPDF() {
   const [imagePreview, setImagePreview] = useState('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
   const [generatedLatex, setGeneratedLatex] = useState('');
+  const [selectedLatexFile, setSelectedLatexFile] = useState(null);
 
+
+  // Handle LaTeX File Selection
+  const handleLatexFileChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    setSelectedLatexFile(file);
+    handleLatexUpload(); 
+  }
+  };
+  // Upload LaTeX File and Fetch LaTeX Code
+const handleLatexUpload = async () => {
+  if (!selectedLatexFile) return;
+
+  try {
+    const formData = new FormData();
+    formData.append("latexFile", selectedLatexFile);
+
+    const response = await axios.post("http://localhost:5000/extract-latex", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    if (response.data?.latexCode) {
+      setCode(response.data.latexCode); // Store LaTeX code for Monaco Editor
+    }
+  } catch (err) {
+    console.error("Upload error:", err);
+  } finally {
+    setSelectedLatexFile(null);
+  }
+};
   const handleCompile = useCallback(async () => {
     if (!code) {
       setError('Please enter LaTeX code.');
@@ -105,7 +136,7 @@ function LatexToPDF() {
       <div className="grid grid-cols-2 gap-6 [130vh] rounded-lg shadow-sm  border-1 border-blue-500 p-4">
         {/* Left Panel: LaTeX Editor */}
         <div className="bg-white min-h-[120vh] rounded-lg border-1 border-blue-500 shadow-lg p-4">
-          <div className="flex justify-end space-x-2 mb-4">
+          <div className="  flex justify-end space-x-2 mb-4">
             <label className="cursor-pointer">
               <input
                 type="file"
@@ -121,17 +152,34 @@ function LatexToPDF() {
             </label>
           </div>
 
-          <MonacoEditor
-            height="110vh"
+          <div className="flex justify-end space-x-2 mb-4">
+              {/* LaTeX File Upload */}
+              <label className="cursor-pointer">
+                <input
+                  type="file"
+                  className="hidden"
+                  accept=".tex"
+                  onChange={handleLatexFileChange} // Function to handle LaTeX file selection
+                />
+                <div className="flex items-center space-x-1 bg-[#1e4b9c] text-white px-3 py-1 text-sm font-medium rounded-md cursor-pointer hover:bg-blue-700">
+                  <Upload className="w-4 h-4" />
+                  <span>Upload LaTeX File</span>
+                </div>
+              </label>
+            </div>
+
+
+            <MonacoEditor
+            height="100vh"
             language="latex"
-            value={code}
-            onChange={(value) => setCode(value || '')}
+            value={code} 
+            onChange={(value) => setCode(value || "")}
             theme="vs-light"
             options={{
               minimap: { enabled: false },
               fontSize: 14,
-              wordWrap: 'on',
-              automaticLayout: true
+              wordWrap: "on",
+              automaticLayout: true,
             }}
           />
         </div>
