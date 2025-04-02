@@ -2,7 +2,7 @@ const fs = require("fs");
 const { exec } = require("child_process");
 const Template = require("../models/template");
 const path = require("path");
-
+const pdfParse = require("pdf-parse");
 
 exports.uploadImage = (req, res) => {
     if (req.file) {
@@ -93,3 +93,22 @@ exports.generatePDF = async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   };
+
+exports.extractLatex = async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+
+    const texPath = req.file.path;
+    
+    const latexCode = await fs.promises.readFile(texPath, { encoding: "utf8" });
+
+    await fs.promises.unlink(texPath);
+
+    res.status(200).json({ latexCode });
+
+  } catch (err) {
+    console.error("Error reading LaTeX file:", err);
+    res.status(500).json({ error: "Failed to read LaTeX file" });
+  }
+};
+  
