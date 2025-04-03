@@ -6,8 +6,8 @@ const Info = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    document.title = "Instructions Page";
-    setTimeout(() => setIsLoaded(true), 200);
+    
+    setTimeout(() => {document.title = "Instructions Page"; setIsLoaded(true)}, 200);
   }, []);
 
   const toggleCollapse = (index) => {
