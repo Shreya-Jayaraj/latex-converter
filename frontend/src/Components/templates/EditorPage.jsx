@@ -52,8 +52,14 @@ const EditorPage = () => {
           `\\item ${escapeLatex(q.text)} (Marks: ${q.marks}, CO: ${q.co}, BL: ${q.bl})`
         ).join('\n');
 
-      const sectionALatex = formatQuestions(sectionA);
-      const sectionBLatex = formatQuestions(sectionB);
+        const sectionALatex = sectionA.length
+        ? formatQuestions(sectionA)
+        : "\\item \\textit{No questions in this section}";
+      
+      const sectionBLatex = sectionB.length
+        ? formatQuestions(sectionB)
+        : "\\item \\textit{No questions in this section}";
+      
 
       const formattedContent = content
         .replace("%%SECTION_A_QUESTIONS%%", sectionALatex)
