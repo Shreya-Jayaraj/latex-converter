@@ -28,7 +28,7 @@ const EditorPage = () => {
   useEffect(() => {
     const fetchTemplate = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/templates/67fd1a723ec68955883d02d1");
+        const response = await axios.get("http://localhost:5000/templates/67fd71692c1ce5480e12db42");
         setContent(response.data.latexCode);
       } catch (error) {
         console.error("Error fetching template:", error);
