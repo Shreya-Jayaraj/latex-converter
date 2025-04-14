@@ -256,8 +256,8 @@ const EditorPage = () => {
 
       {/* Modal */}
       {showQuestionModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-[400px] space-y-3">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center z-50">
+            <div className="bg-white mt-20 p-6 rounded-lg w-[400px] max-h-100 space-y-3">
             <h3 className="text-lg font-semibold text-center">
               {isEditing ? "Edit Question" : "Add Question"}
             </h3>
