@@ -18,6 +18,13 @@ const EditorPage = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [preview, setPreview] = useState(null);
 
+  // 👉 Course info states
+  const [courseCode, setCourseCode] = useState("");
+  const [courseName, setCourseName] = useState("");
+  const [maxMarks, setMaxMarks] = useState("");
+  const [date, setDate] = useState("");
+  const [duration, setDuration] = useState("");
+
   useEffect(() => {
     const fetchTemplate = async () => {
       try {
@@ -52,18 +59,22 @@ const EditorPage = () => {
           `\\item ${escapeLatex(q.text)} (Marks: ${q.marks}, CO: ${q.co}, BL: ${q.bl})`
         ).join('\n');
 
-        const sectionALatex = sectionA.length
+      const sectionALatex = sectionA.length
         ? formatQuestions(sectionA)
         : "\\item \\textit{No questions in this section}";
-      
+
       const sectionBLatex = sectionB.length
         ? formatQuestions(sectionB)
         : "\\item \\textit{No questions in this section}";
-      
 
-      const formattedContent = content
+      let formattedContent = content
         .replace("%%SECTION_A_QUESTIONS%%", sectionALatex)
-        .replace("%%SECTION_B_QUESTIONS%%", sectionBLatex);
+        .replace("%%SECTION_B_QUESTIONS%%", sectionBLatex)
+        .replace("%%COURSE_CODE%%", escapeLatex(courseCode))
+        .replace("%%COURSE_NAME%%", escapeLatex(courseName))
+        .replace("%%MAX_MARKS%%", escapeLatex(maxMarks))
+        .replace("%%DATE%%", escapeLatex(date))
+        .replace("%%DURATION%%", escapeLatex(duration));
 
       const response = await axios.post(
         "http://localhost:5000/generate-pdf",
@@ -103,17 +114,52 @@ const EditorPage = () => {
     setIsEditing(true);
     setShowQuestionModal(true);
   };
+
   const handleDelete = (index) => {
     const updated = [...questions];
     updated.splice(index, 1);
     setQuestions(updated);
   };
-  
 
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-1 flex flex-col p-4 space-y-4 bg-gray-50 overflow-y-auto">
-        <div className="flex items-center space-x-2">
+        {/* 👉 Course Info Inputs */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <input
+            className="border border-gray-300 rounded px-3 py-2"
+            placeholder="Course Code"
+            value={courseCode}
+            onChange={(e) => setCourseCode(e.target.value)}
+          />
+          <input
+            className="border border-gray-300 rounded px-3 py-2"
+            placeholder="Course Name"
+            value={courseName}
+            onChange={(e) => setCourseName(e.target.value)}
+          />
+          <input
+            className="border border-gray-300 rounded px-3 py-2"
+            placeholder="Max Marks"
+            value={maxMarks}
+            onChange={(e) => setMaxMarks(e.target.value)}
+          />
+          <input
+            className="border border-gray-300 rounded px-3 py-2"
+            placeholder="Date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+          <input
+            className="border border-gray-300 rounded px-3 py-2"
+            placeholder="Duration"
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+          />
+        </div>
+
+        {/* Control Buttons */}
+        <div className="flex items-center space-x-2 mt-4">
           <button
             onClick={handleCompileTemplate}
             disabled={isLoading}
@@ -133,6 +179,7 @@ const EditorPage = () => {
           </button>
         </div>
 
+        {/* Questions Preview */}
         {questions.length > 0 && (
           <div className="mt-6">
             <h4 className="text-md font-semibold mb-2">Added Questions</h4>
@@ -146,26 +193,26 @@ const EditorPage = () => {
                       <strong>Marks:</strong> {q.marks} | <strong>CO:</strong> {q.co} | <strong>BL:</strong> {q.bl} | <strong>Section:</strong> {q.section}
                     </p>
                     <div className="flex space-x-2 mt-1">
-                    <button
-                      className="text-blue-600 text-xs"
-                      onClick={() => handleEdit(idx)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="text-red-600 text-xs"
-                      onClick={() => handleDelete(idx)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-
+                      <button
+                        className="text-blue-600 text-xs"
+                        onClick={() => handleEdit(idx)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="text-red-600 text-xs"
+                        onClick={() => handleDelete(idx)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 ))}
             </div>
           </div>
         )}
 
+        {/* PDF Preview */}
         {preview && (
           <div className="mt-6">
             <h4 className="text-md font-semibold mb-2">Preview</h4>
@@ -174,6 +221,7 @@ const EditorPage = () => {
         )}
       </div>
 
+      {/* Modal */}
       {showQuestionModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-[400px] space-y-3">
