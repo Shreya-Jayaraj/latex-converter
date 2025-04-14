@@ -103,6 +103,12 @@ const EditorPage = () => {
     setIsEditing(true);
     setShowQuestionModal(true);
   };
+  const handleDelete = (index) => {
+    const updated = [...questions];
+    updated.splice(index, 1);
+    setQuestions(updated);
+  };
+  
 
   return (
     <div className="flex flex-col h-screen">
@@ -139,12 +145,21 @@ const EditorPage = () => {
                     <p>
                       <strong>Marks:</strong> {q.marks} | <strong>CO:</strong> {q.co} | <strong>BL:</strong> {q.bl} | <strong>Section:</strong> {q.section}
                     </p>
+                    <div className="flex space-x-2 mt-1">
                     <button
-                      className="text-blue-600 text-xs mt-1"
+                      className="text-blue-600 text-xs"
                       onClick={() => handleEdit(idx)}
                     >
                       Edit
                     </button>
+                    <button
+                      className="text-red-600 text-xs"
+                      onClick={() => handleDelete(idx)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+
                   </div>
                 ))}
             </div>
