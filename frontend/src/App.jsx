@@ -6,6 +6,7 @@ import Series from "./Components/templates/series";
 import Semester from "./Components/templates/sem";
 import Guide from "./Components/Guide";
 import Info from "./Components/info";
+import EditorPage from "./Components/templates/EditorPage";
 
 const AppContent = () => {
   const location = useLocation(); // Get the current route
@@ -38,6 +39,7 @@ const AppContent = () => {
         <Route path="/series" element={<Series />} />
         <Route path="/semester" element={<Semester />} />
         <Route path="/info" element={<Info />} /> {/* Guide is hidden here */}
+        <Route path="/editor-page" element ={<EditorPage />} />
       </Routes>
     </div>
   );
