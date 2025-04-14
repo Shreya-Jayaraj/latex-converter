@@ -13,6 +13,7 @@ const EditorPage = () => {
     co: "",
     bl: "",
     section: "A",
+    image: null, 
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -55,6 +56,28 @@ const EditorPage = () => {
   };
   
 
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append("image", file);
+  
+    try {
+      const response = await axios.post("http://localhost:5000/image-upload/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      const imageUrl = response.data.imagePath;
+      setNewQuestion((prev) => ({ ...prev, image: imageUrl }));
+    } catch (error) {
+      console.error("Image upload failed:", error);
+    }
+  };
+  
+
   const handleCompileTemplate = async () => {
     setIsLoading(true);
     try {
@@ -62,9 +85,16 @@ const EditorPage = () => {
       const sectionB = questions.filter(q => q.section === "B").sort((a, b) => a.serial - b.serial);
 
       const formatQuestions = (qs) =>
-        qs.map(q =>
-          `\\item ${escapeLatex(q.text)} (Marks: ${q.marks}, CO: ${q.co}, BL: ${q.bl})`
-        ).join('\n');
+      qs.map(q => {
+        const escapedText = escapeLatex(q.text);
+        const imageLatex = q.image
+        ? `\\begin{figure}[h]
+      \\centering
+      \\includegraphics[width=0.5\\linewidth]{${q.image}}
+      \\end{figure}`
+        : "";
+              return `\\item ${escapedText} ${imageLatex} (Marks: ${q.marks}, CO: ${q.co}, BL: ${q.bl})`;
+      }).join('\n');
 
       const sectionALatex = sectionA.length
         ? formatQuestions(sectionA)
@@ -225,6 +255,10 @@ const EditorPage = () => {
                     <p>
                       <strong>Marks:</strong> {q.marks} | <strong>CO:</strong> {q.co} | <strong>BL:</strong> {q.bl} | <strong>Section:</strong> {q.section}
                     </p>
+                    {q.image && (
+                        <img src={`http://localhost:5000/${q.image}`} alt="Question" className="w-32 h-auto mt-2 rounded shadow" />
+                      )}
+                      
                     <div className="flex space-x-2 mt-1">
                       <button
                         className="text-blue-600 text-xs"
@@ -257,7 +291,7 @@ const EditorPage = () => {
       {/* Modal */}
       {showQuestionModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center z-50">
-            <div className="bg-white mt-20 p-6 rounded-lg w-[400px] max-h-100 space-y-3">
+            <div className="bg-white mt-20 p-6 rounded-lg w-[400px] max-h-[120vh] space-y-3">
             <h3 className="text-lg font-semibold text-center">
               {isEditing ? "Edit Question" : "Add Question"}
             </h3>
@@ -292,6 +326,20 @@ const EditorPage = () => {
               value={newQuestion.bl}
               onChange={(e) => setNewQuestion({ ...newQuestion, bl: e.target.value })}
             />
+            <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="mt-2"
+            />
+            {newQuestion.image && (
+                <img
+                  src={`http://localhost:5000/${newQuestion.image}`}
+                  alt="Uploaded Preview"
+                  className="w-24 mt-2 rounded"
+              />
+              )}
+
             <select
               className="w-full border border-gray-300 rounded px-3 py-1"
               value={newQuestion.section}
