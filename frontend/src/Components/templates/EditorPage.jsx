@@ -59,9 +59,14 @@ const EditorPage = () => {
         ).join('\n');
 
       // No extra enumerate block here – assumed to be in template
-      const sectionALatex = formatQuestions(sectionA);
-      const sectionBLatex = formatQuestions(sectionB);
-
+      const sectionALatex = sectionA.length
+      ? formatQuestions(sectionA)
+      : "\\item \\textit{No questions in this section}";
+    
+    const sectionBLatex = sectionB.length
+      ? formatQuestions(sectionB)
+      : "\\item \\textit{No questions in this section}";
+    
       const formattedContent = content
         .replace("%%SECTION_A_QUESTIONS%%", sectionALatex)
         .replace("%%SECTION_B_QUESTIONS%%", sectionBLatex);
