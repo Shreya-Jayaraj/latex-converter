@@ -8,6 +8,8 @@ import Guide from "./Components/Guide";
 import Info from "./Components/info";
 import EditorPage from "./Components/templates/EditorPage";
 import EditorSeries from "./Components/templates/EditorSeries"
+import SeriesOption from "./Components/seriesOption";
+import SemOption from "./Components/semOptions";
 
 const AppContent = () => {
   const location = useLocation(); // Get the current route
@@ -37,11 +39,13 @@ const AppContent = () => {
 
       <Routes>
         <Route path="/" element={<LatexToPDF />} />
-        <Route path="/series" element={<Series />} />
-        <Route path="/semester" element={<Semester />} />
+        <Route path="/series-template" element={<Series />} />
+        <Route path="/semester-template" element={<Semester />} />
         <Route path="/info" element={<Info />} /> {/* Guide is hidden here */}
-        <Route path="/editor-page" element ={<EditorPage />} />
-        <Route path="/editor-series" element ={<EditorSeries />} />
+        <Route path="/semester-auto-latex" element ={<EditorPage />} />
+        <Route path="/series-auto-latex" element ={<EditorSeries />} />
+        <Route path="/series-option" element ={<SeriesOption />} />
+        <Route path="/sem-option" element ={<SemOption />} />
       </Routes>
     </div>
   );

@@ -36,18 +36,18 @@ const Navbar = () => {
             }`}
           >
             <Link
-              to="/series"
+              to="/series-option"
               className="block px-4 py-2 hover:bg-blue-500"
               onClick={() => setIsDropdownOpen(false)} 
             >
-              Series Exam Template
+              Series Exam
             </Link>
             <Link
-              to="/semester"
+              to="/sem-option"
               className="block px-4 py-2 hover:bg-blue-500"
               onClick={() => setIsDropdownOpen(false)} 
             >
-              Semester Exam Template
+              Semester Exam 
             </Link>
           </div>
         </div>
