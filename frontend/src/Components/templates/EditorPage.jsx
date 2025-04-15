@@ -326,19 +326,23 @@ const EditorPage = () => {
               value={newQuestion.bl}
               onChange={(e) => setNewQuestion({ ...newQuestion, bl: e.target.value })}
             />
-            <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="mt-2"
+           <div className="flex flex-col items-start gap-2">
+          <label className="text-sm font-medium text-gray-700">Upload Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition"
+          />
+          {newQuestion.image && (
+            <img
+              src={`http://localhost:5000/${newQuestion.image}`}
+              alt="Uploaded Preview"
+              className="w-24 h-24 object-cover rounded border border-gray-200 shadow-sm "
             />
-            {newQuestion.image && (
-                <img
-                  src={`http://localhost:5000/${newQuestion.image}`}
-                  alt="Uploaded Preview"
-                  className="w-24 mt-2 rounded"
-              />
-              )}
+          )}
+        </div>
+}
 
             <select
               className="w-full border border-gray-300 rounded px-3 py-1"
